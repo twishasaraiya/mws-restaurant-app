@@ -120,17 +120,21 @@ createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
   name.innerHTML = review.name;
+  name.className='review-name';
   li.appendChild(name);
 
   const date = document.createElement('p');
+  date.className='review-date';
   date.innerHTML = review.date;
   li.appendChild(date);
 
   const rating = document.createElement('p');
+  rating.className='review-rating';
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.className='review-body';
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
