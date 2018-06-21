@@ -1,4 +1,4 @@
-var CACHE_NAME = "mws-v1";
+var CACHE_NAME = "mws-v2";
 var filesToCache = [
   '/',
   'css/styles.css',
@@ -62,16 +62,13 @@ self.addEventListener('fetch',function(event){
             }
 
               console.log('No response from cache. About to Fetch from Network...');
-              return fetch(event.request.clone(),{
-                mode : 'no-cors'
-              }).then(function(resp){
-                  console('[Service Worker] Network Resp',resp);
+              return fetch(event.request.clone()).then(function(resp){
                   caches.open(CACHE_NAME).then(function(cache){
                     cache.put(event.request,resp.clone());
                   });
                   return resp;
               }).catch(function(error){
-                  console.log('[SW] Network fetching failed for' , event.request.url);
+                  console.log('[SW] Network Error' ,error);
                   return caches.match('offline.html');
               });
         })
