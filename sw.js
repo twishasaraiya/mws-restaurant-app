@@ -1,5 +1,6 @@
-var CACHE_NAME = "mws-v2";
+var CACHE_NAME = "mws-v1";
 var filesToCache = [
+  '/',
   'css/styles.css',
   'index.html',
   'restaurant.html',
@@ -14,6 +15,7 @@ var filesToCache = [
   'img/8.jpg',
   'img/9.jpg',
   'img/10.jpg',
+  'img/error_page.gif',
   'js/main.js',
   'js/restaurant_info.js',
   'js/dbhelper.js',
@@ -49,26 +51,29 @@ self.addEventListener('activate',function(event){
 });
 
 self.addEventListener('fetch',function(event){
-    console.log('[Service Worker] Fetch',event.request.url);
+  console.log(event.request);
+  console.log('Search cache for ',event.request.url);
     event.respondWith(
-      caches.open(CACHE_NAME).then(function(cache){
-        return cache.match(event.request).then(function(response){
-          return response || fetch(event.request)
-          .then(function(resp){
-            if(response.ok){
-              console.log('[serviceWorker] Caching new data');
-              cache.put(event.request,resp.clone());
-              return resp;
-            }else{
-              console.log('[serviceWorker] Resp',resp);
-              throw Error('response status '+response.status);
+        caches.match(event.request).then(function(response){
+          console.log('Response from cache',response);
+            if(response){
+              console.log('[SW] Found response in cache');
+              return response;
             }
-          })
-          .catch(function(error){
-              console.log('[Service Worker] Network Request Failed');
-              return caches.match('offline.html');
-          });
-        });
-      })
+
+              console.log('No response from cache. About to Fetch from Network...');
+              return fetch(event.request.clone(),{
+                mode : 'no-cors'
+              }).then(function(resp){
+                  console('[Service Worker] Network Resp',resp);
+                  caches.open(CACHE_NAME).then(function(cache){
+                    cache.put(event.request,resp.clone());
+                  });
+                  return resp;
+              }).catch(function(error){
+                  console.log('[SW] Network fetching failed for' , event.request.url);
+                  return caches.match('offline.html');
+              });
+        })
     );
 });

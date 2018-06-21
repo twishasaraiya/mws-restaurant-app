@@ -3,10 +3,32 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
-  <title>Restaurant Reviews</title>
+  <title>Sorry!</title>
+  <style>
+  .container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 20%;
+  }
+  .left,.right{
+    width: 40%;
+    margin: auto;
+  }
+  </style>
 </head>
 
 <body>
-  <h1>Oops! We couldn't find the page you are looking for</h1>
-  <p>404</p>
+  <div class="container">
+    <div class="left">
+      <h1>Oops!</h1><h3> We couldn't find the page you are looking for</h3>
+      <p>Error Code: 404</p>
+      <a href="/">Home</a>
+    </div>
+    <div class="right">
+      <img src="img/error_page.gif">
+    </div>
+</div>
 </body>
+
+</html>
