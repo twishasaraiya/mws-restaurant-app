@@ -1,4 +1,4 @@
-var CACHE_NAME = "mws-v2";
+var CACHE_NAME = "mws-v1";
 var filesToCache = [
   '/',
   'css/styles.css',
@@ -29,9 +29,8 @@ self.addEventListener('install',function(event){
     caches.open(CACHE_NAME)
     .then(function(cache){
       return cache.addAll(filesToCache);
-    })
+    }).then(self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate',function(event){
@@ -63,8 +62,12 @@ self.addEventListener('fetch',function(event){
 
               console.log('No response from cache. About to Fetch from Network...');
               return fetch(event.request.clone()).then(function(resp){
+                if(resp.status === 404){
+                  return caches.match('offline.html');
+                }
+                var respClone = resp.clone();
                   caches.open(CACHE_NAME).then(function(cache){
-                    cache.put(event.request,resp.clone());
+                    cache.put(event.request,respClone);
                   });
                   return resp;
               }).catch(function(error){

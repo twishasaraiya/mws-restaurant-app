@@ -167,6 +167,10 @@ nav h1 a {
   min-height: 248px;
   min-width: 100%;
 }
+.lazy{
+	opacity: 0;
+	transition: all 300ms;
+}
 #restaurants-list li h1 {
   color: #853D00; 	/* Improve the contrast ratio */
   font-family: Arial,sans-serif;
@@ -368,6 +372,19 @@ nav h1 a {
 	}
 }
 
+@media screen and (min-width: 950px){
+	.inside #map-container{
+		width: 50%;
+		position: fixed;
+		height: 100%;
+	}
+	#restaurant-container, #reviews-container{
+		width: 45%;
+	}
+	#restaurant-name{
+		margin-top: 40px;
+	}
+}
 @media screen and (min-width: 1400px) {
 	#restaurants-list li{
 		width: 30%;
