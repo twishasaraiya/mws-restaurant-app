@@ -51,13 +51,12 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;
-  height: 80px;
   background-color: #252831;
   text-align:center;
 }
 nav h1 {
   margin: auto;
-	padding-top: calc((80px - 60px)/2);
+	padding: 20px;
 }
 nav h1 a {
   color: #fff;
@@ -164,8 +163,8 @@ nav h1 a {
   display: block;
   margin: 0;
   max-width: 100%;
-  min-height: 248px;
   min-width: 100%;
+	height: auto;
 }
 .lazy{
 	opacity: 0;
@@ -210,7 +209,7 @@ nav h1 a {
   height: 400px;
 	position: relative;
   right: 0;
-  top: 80px;
+  top: 120px;
   width: 100%;
 }
 .inside #map {
@@ -229,7 +228,7 @@ nav h1 a {
   font-size: 20pt;
   font-weight: 200;
   letter-spacing: 0;
-  margin: 15px 0 30px;
+  margin: 30px 0;
   text-transform: uppercase;
   line-height: 1.1;
 }
