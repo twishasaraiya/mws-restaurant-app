@@ -39,17 +39,7 @@
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAk8JV1tcGb-lPfvRnDzjEa85e77W8C9CE&libraries=places&callback=initMap"></script>
   <script type="application/javascript" charset="utf-8" src="js/lazy-load.js"></script>
-  <script>
-        if('serviceWorker' in navigator){
-            navigator.serviceWorker.register('sw.js')
-            .then(function(registeration){
-              console.log('Service Worker registered');
-            })
-            .catch(function(error){
-              console.log('Failed to register Service Worker');
-            });
-        }
-  </script>
+  <script type="application/javascript" charset="utf-8" src="register-sw.js"></script>
 
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
