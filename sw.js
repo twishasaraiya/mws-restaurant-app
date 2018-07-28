@@ -24,7 +24,7 @@ var filesToCache = [
 var allCaches =[CACHE_NAME];
 
 self.addEventListener('install',function(event){
-  console.log('[Service Worker] Install');
+  //console.log('[Service Worker] Install');
   event.waitUntil(
     caches.open(CACHE_NAME)
     .then(function(cache){
@@ -34,14 +34,14 @@ self.addEventListener('install',function(event){
 });
 
 self.addEventListener('activate',function(event){
-  console.log('[Service Worker] Activate');
+  //console.log('[Service Worker] Activate');
   event.waitUntil(
     caches.keys().then(function(cacheNames){
       return Promise.all(
         cacheNames.filter(function(cacheName){
           return cacheName.startsWith('mws-') && !allCaches.includes(cacheName);
         }).map(function(cacheName){
-          console.log('Deleting ',cacheName);
+          //console.log('Deleting ',cacheName);
           return caches.delete(cacheName);
         })
       );
@@ -50,17 +50,17 @@ self.addEventListener('activate',function(event){
 });
 
 self.addEventListener('fetch',function(event){
-  console.log(event.request);
-  console.log('Search cache for ',event.request.url);
+  //console.log(event.request);
+  //console.log('Search cache for ',event.request.url);
     event.respondWith(
         caches.match(event.request).then(function(response){
-          console.log('Response from cache',response);
+          //console.log('Response from cache',response);
             if(response){
-              console.log('[SW] Found response in cache');
+              //console.log('[SW] Found response in cache');
               return response;
             }
 
-              console.log('No response from cache. About to Fetch from Network...');
+              //console.log('No response from cache. About to Fetch from Network...');
               return fetch(event.request.clone()).then(function(resp){
                 if(resp.status === 404){
                   return caches.match('offline.html');
@@ -71,7 +71,7 @@ self.addEventListener('fetch',function(event){
                   });
                   return resp;
               }).catch(function(error){
-                  console.log('[SW] Network Error' ,error);
+                  //console.log('[SW] Network Error' ,error);
                   return caches.match('offline.html');
               });
         })
