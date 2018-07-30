@@ -1,3 +1,5 @@
+//import DBHelper from './dbhelper';
+
 let restaurants,
   neighborhoods,
   cuisines
@@ -142,9 +144,9 @@ createRestaurantHTML = (restaurant) => {
   image.classList.add("restaurant-img","lazy");
   const src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute('data-src',src);
-  const x = src.indexOf('.jpg');
+  const x = src.indexOf('.webp');
   const path = src.substr(0,x);
-  image.setAttribute('data-srcset',path+'-300.jpg 425w,'+ path+'-600.jpg 725w');
+  image.setAttribute('data-srcset',path+'-300.webp 425w,'+ path+'-600.webp 725w');
   image.setAttribute('sizes','(max-width: 425px) 300px, (max-width: 725px) 400px, 800px');
   image.alt = restaurant.name;
   li.append(image);

@@ -1,6 +1,9 @@
 /**
  * Common database helper functions.
  */
+
+//import idb from 'idb';
+
 class DBHelper {
 
   /**
@@ -11,7 +14,14 @@ class DBHelper {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
-
+  /**
+   * Create Indexed DB
+   */
+  /*static createIDB(){
+      var dbPromise = idb.open('test-db',1,(upgradeDB)=>{
+          //create a new object store
+      });
+  }*/
   /**
    * Fetch all restaurants.
    */
@@ -143,7 +153,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}.jpg`);
+    return (`/img/webp/${restaurant.photograph}.webp`);
   }
 
   /**
@@ -161,3 +171,5 @@ class DBHelper {
   }
 
 }
+
+//export default DBHelper;
