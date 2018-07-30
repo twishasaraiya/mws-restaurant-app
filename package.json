@@ -1,0 +1,24 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "Restaurant Reviews PWA for MWS Nanodegree",
+  "main": "register-sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twishasaraiya/mws-restaurant-stage-1.git"
+  },
+  "author": "twishasaraiya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/twishasaraiya/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/twishasaraiya/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-webp": "^3.0.0",
+    "idb": "^2.1.3"
+  }
+}
