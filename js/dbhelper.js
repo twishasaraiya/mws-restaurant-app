@@ -2,7 +2,7 @@
  * Common database helper functions.
  */
 
-//import idb from 'idb';
+import idb from 'idb';
 
 class DBHelper {
 
@@ -17,11 +17,11 @@ class DBHelper {
   /**
    * Create Indexed DB
    */
-  /*static createIDB(){
+  static createIDB(){
       var dbPromise = idb.open('test-db',1,(upgradeDB)=>{
           //create a new object store
       });
-  }*/
+  }
   /**
    * Fetch all restaurants.
    */
@@ -172,4 +172,4 @@ class DBHelper {
 
 }
 
-//export default DBHelper;
+export default DBHelper;

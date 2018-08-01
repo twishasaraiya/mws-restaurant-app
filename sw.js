@@ -16,9 +16,6 @@ var filesToCache = [
   'img/webp/9.webp',
   'img/webp/10.webp',
   'img/error_page.gif',
-  'js/main.js',
-  'js/restaurant_info.js',
-  'js/dbhelper.js',
   'js/lazy-load.js'
 ];
 var allCaches =[CACHE_NAME];

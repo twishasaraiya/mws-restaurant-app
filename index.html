@@ -6,7 +6,7 @@
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="shortcut icon" href="icons/icon.ico" type="image/x-icon">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
   <meta name="theme_color" content="#155989">
@@ -37,10 +37,10 @@
       <ul id="restaurants-list"></ul>
     </section>
   </main>
-
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAk8JV1tcGb-lPfvRnDzjEa85e77W8C9CE&libraries=places&callback=initMap"></script>
+  <script defer type="application/javascript" charset="utf-8" src="js/build/main.bundle.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAk8JV1tcGb-lPfvRnDzjEa85e77W8C9CE&libraries=places&callback=initMap" async defer></script>
+  <!-- <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/main.js"></script> -->
   <script type="application/javascript" charset="utf-8" src="js/lazy-load.js"></script>
   <script type="application/javascript" charset="utf-8" src="register-sw.js"></script>
 
