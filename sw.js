@@ -1,22 +1,22 @@
 var CACHE_NAME = "mws-v2";
 var filesToCache = [
   '/',
-  'css/styles.css',
+  'src/css/styles.css',
   'index.html',
   'restaurant.html',
   'offline.html',
-  'img/webp/1.webp',
-  'img/webp/2.webp',
-  'img/webp/3.webp',
-  'img/webp/4.webp',
-  'img/webp/5.webp',
-  'img/webp/6.webp',
-  'img/webp/7.webp',
-  'img/webp/8.webp',
-  'img/webp/9.webp',
-  'img/webp/10.webp',
-  'img/error_page.gif',
-  'js/lazy-load.js'
+  'public/img/webp/1.webp',
+  'public/img/webp/2.webp',
+  'public/img/webp/3.webp',
+  'public/img/webp/4.webp',
+  'public/img/webp/5.webp',
+  'public/img/webp/6.webp',
+  'public/img/webp/7.webp',
+  'public/img/webp/8.webp',
+  'public/img/webp/9.webp',
+  'public/img/webp/10.webp',
+  'public/img/error_page.gif',
+  'src/js/lazy-load.js'
 ];
 var allCaches =[CACHE_NAME];
 

@@ -14,17 +14,14 @@ var rename = require('gulp-rename');
 var log=require('gulplog');
 // vinyl => virtual file format for gulp streams
 
-var mainPageFiles = ['js/dbhelper.js','js/main.js'];
-var restaurantInfoPageFiles = ['js/dbhelper.js','js/restaurant_info.js'];
+var mainPageFiles = ['src/js/dbhelper.js','src/js/main.js'];
+var restaurantInfoPageFiles = ['src/js/dbhelper.js','src/js/restaurant_info.js'];
 
-gulp.task('console',()=>{
-  console.log('Hey gulp');
-})
  /*
   * Convert Images to Next-Gen format Webp
   */
 gulp.task('images',()=>{
-  gulp.src('img/*.jpg')
+  gulp.src('src/img/*.jpg')
   .pipe(webp())
   .pipe(gulp.dest('img/webp'))
 });
@@ -48,7 +45,7 @@ gulp.task('build',()=>{
     .pipe(uglify())
     .on('error', log.error)
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./js/build/'));
+    .pipe(gulp.dest('build/js/'));
   });
 
     restaurantInfoPageFiles.map((jsfile)=>{
@@ -64,7 +61,7 @@ gulp.task('build',()=>{
     .pipe(uglify())
     .on('error', log.error)
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./js/build/'));
+    .pipe(gulp.dest('build/js'));
   });
 });
 
@@ -72,7 +69,7 @@ gulp.task('build',()=>{
    * Minify and autoprefix css
    */
 gulp.task('styles',()=>{
-  gulp.src('./css/*.css')
+  gulp.src('src/css/*.css')
   .pipe(sourcemaps.init())
   .pipe(autoprefixer({
     browsers : ['last 2 versions']
@@ -84,10 +81,10 @@ gulp.task('styles',()=>{
     suffix: '.min'
   }))
   .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./css'));
+  .pipe(gulp.dest('build/css'));
 });
   /*
-   * Watch and rebuild files
+   * Watch and rebuild js files
    */
 gulp.task('watch',()=>{
     gulp.watch(jsfiles,['build']);
