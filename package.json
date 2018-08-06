@@ -5,7 +5,8 @@
   "main": "register-sw.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp build"
+    "build": "gulp build && gulp styles",
+    "start": "python -m http.server"
   },
   "repository": {
     "type": "git",
