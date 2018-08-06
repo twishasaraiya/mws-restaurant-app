@@ -17,32 +17,75 @@ class DBHelper {
   /**
    * Create Indexed DB
    */
-  static createIDB(){
-      var dbPromise = idb.open('test-db',1,(upgradeDB)=>{
-          //create a new object store
+   static checkIdb(){
+     return "indexedDB" in window;
+   }
+
+  static openIdb(){
+      if(!DBHelper.checkIdb()) return;
+      return idb.open('test-db',1,upgradeDB =>{
+        console.log('indexeDB created!');
+        upgradeDB.createObjectStore('restaurants',{keyPath:'id'});
       });
-      return dbPromise;
+  }
+  /*
+   * Add restaurant to indexeDB
+   */
+
+  static addToIdb(data){
+    const dbPromise = DBHelper.openIdb();
+    return dbPromise.then(db=>{
+      var tx=db.transaction('restaurants','readwrite');
+      var store = tx.objectStore('restaurants');
+      data.map(restaurant => store.put(restaurant));
+      return tx.complete;
+    });
+  }
+  static fetchFromIdb(){
+    const dbPromise=DBHelper.openIdb();
+    return dbPromise.then(db=>{
+      var tx= db.transaction('restaurants','readonly');
+      var store = tx.objectStore('restaurants');
+      return store.getAll();
+    });
   }
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    fetch(DBHelper.DATABASE_URL,{
-      method: 'get'
+    console.log('fetchRestaurants');
+    DBHelper.fetchFromIdb()
+    .then((idbResp)=>{
+      console.log('idb response',idbResp);
+      if(idbResp){
+        // found in IDB
+        return callback(null,idbResp);
+      }else{
+        // not found try to fetch from Network
+        fetch(DBHelper.DATABASE_URL,{
+          method: 'get'
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            console.log("Data",data);
+            DBHelper.addToIdb(data);
+           callback(null,data)
+         })
+        .catch((err) => callback(err,null));
+      }
+
     })
-    .then((resp) => resp.json())
-    .then((data) => callback(null,data))
-    .catch((err) => callback(err,null));
+
   }
 
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
+    // fetch all restaurants with proper error handling
     DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
-        callback(error, null);
+        callback(error,null);
       } else {
         const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
@@ -160,7 +203,17 @@ class DBHelper {
   /**
    * Map marker for a restaurant.
    */
-  static mapMarkerForRestaurant(restaurant, map) {
+   static mapMarkerForRestaurant(restaurant, map) {
+    // https://leafletjs.com/reference-1.3.0.html#marker
+    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
+      {title: restaurant.name,
+      alt: restaurant.name,
+      url: DBHelper.urlForRestaurant(restaurant)
+      })
+      marker.addTo(newMap);
+    return marker;
+  }
+  /* static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
       title: restaurant.name,
@@ -169,7 +222,7 @@ class DBHelper {
       animation: google.maps.Animation.DROP}
     );
     return marker;
-  }
+  } */
 
 }
 
