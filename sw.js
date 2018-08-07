@@ -1,7 +1,9 @@
 var CACHE_NAME = "mws-v2";
 var filesToCache = [
   '/',
-  'src/css/styles.css',
+  'build/css/styles.min.css',
+  'build/js/restaurant.bundle.js',
+  'build/js/main.bundle.js',
   'index.html',
   'restaurant.html',
   'offline.html',
@@ -16,7 +18,7 @@ var filesToCache = [
   'public/img/webp/9.webp',
   'public/img/webp/10.webp',
   'public/img/error_page.gif',
-  'src/js/lazy-load.js'
+  'src/js/lazy-load.js'  // TODO browserify and uglify
 ];
 var allCaches =[CACHE_NAME];
 
@@ -48,24 +50,22 @@ self.addEventListener('activate',function(event){
 
 self.addEventListener('fetch',function(event){
   //console.log(event.request);
-  //console.log('Search cache for ',event.request.url);
+  console.log('Fetch ',event.request.url);
     event.respondWith(
-        caches.match(event.request).then(function(response){
-          //console.log('Response from cache',response);
-            if(response){
-              //console.log('[SW] Found response in cache');
-              return response;
+        caches.match(event.request).then(function(cacheResponse){
+            if(cacheResponse){
+              return cacheResponse;
             }
 
               //console.log('No response from cache. About to Fetch from Network...');
               return fetch(event.request.clone()).then(function(resp){
-                if(resp.status === 404){
+                /*if(resp.status === 404){
                   return caches.match('offline.html');
                 }
                 var respClone = resp.clone();
                   caches.open(CACHE_NAME).then(function(cache){
                     cache.put(event.request,respClone);
-                  });
+                  });*/
                   return resp;
               }).catch(function(error){
                   //console.log('[SW] Network Error' ,error);
