@@ -57,7 +57,7 @@ class DBHelper {
     DBHelper.fetchFromIdb()
     .then((idbResp)=>{
       console.log('idb response',idbResp);
-      if(idbResp){
+      if(idbResp.length>0){
         // found in IDB
         return callback(null,idbResp);
       }else{

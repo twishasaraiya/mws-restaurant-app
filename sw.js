@@ -59,10 +59,10 @@ self.addEventListener('fetch',function(event){
 
               //console.log('No response from cache. About to Fetch from Network...');
               return fetch(event.request.clone()).then(function(resp){
-                /*if(resp.status === 404){
+                if(resp.status === 404){
                   return caches.match('offline.html');
                 }
-                var respClone = resp.clone();
+                /*var respClone = resp.clone();
                   caches.open(CACHE_NAME).then(function(cache){
                     cache.put(event.request,respClone);
                   });*/
