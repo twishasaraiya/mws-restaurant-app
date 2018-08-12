@@ -35,6 +35,14 @@ h1, h2, h3, h4, h5, h6 {
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+/*
+ * Controlling Font Performance with font-display
+ */
+@font-face {
+  font-family: 'Arvo';
+  font-display: auto;
+  src: local('Arvo'), url(https://fonts.gstatic.com/s/arvo/v9/rC7kKhY-eUDY-ucISTIf5PesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+}
 #maincontent {
   background-color: #f3f3f3;
   min-height: 100%;
@@ -108,7 +116,7 @@ nav h1 a {
 .filter-options {
   width: 100%;
   height: auto;
-  background-color: #155989;		/* Improve the contrast ratio */
+  background-color: #252831;		/* Improve the contrast ratio */
   align-items: center;
 	display: flex;
 	flex-direction: row;
@@ -185,7 +193,7 @@ nav h1 a {
   font-size: 11pt;
 }
 #restaurants-list li a {
-  background-color: orange;
+  background-color: #FFA726;
   border-bottom: 3px solid #eee;
   color: #2B2B2B;      /* Improve the contrast ratio to 7.16:1 */
   display: inline-block;
