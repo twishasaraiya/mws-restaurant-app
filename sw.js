@@ -23,8 +23,14 @@ const respImages = [
   "dist/img/7-300.webp",
   "dist/img/7-600.webp",
   "dist/img/8.webp",
+  "dist/img/8-300.webp",
+  "dist/img/8-600.webp",
   "dist/img/9.webp",
-  "dist/img/10.webp"
+  "dist/img/9-300.webp",
+  "dist/img/9-600.webp",
+  "dist/img/10.webp",
+  "dist/img/10-300.webp",
+  "dist/img/10-600.webp"
 ];
 
 var filesToCache = [
@@ -77,49 +83,44 @@ self.addEventListener("activate", function(event) {
 
 self.addEventListener("fetch", function(event) {
   var url = new URL(event.request.url);
-  // console.log('fetch',url);
-  // var regex = '/img/webp/\d+\.webp/g';
-  // console.log('regex url',regex,regex.test(url.pathname));
+  let request = event.request;
+  // console.log('fetch', url)
   if (url.pathname === "/restaurant.html") {
-    event.request = "/restaurant.html";
+    request = "/restaurant.html";
+    // console.log("Change url", request);
   }
+
+  /* event.respondWith(
+    caches.match(req).then(function(resp) {
+      return resp || fetch(request);
+    })
+  ); */
   event.respondWith(
-    caches.match(event.request).then(function(cacheResponse) {
+    caches.match(request).then(function(cacheResponse) {
       if (cacheResponse) {
-        console.log("cache resp for", url);
+        //  console.log("cache resp for", url);
         return cacheResponse;
       }
 
       // console.log('No response from cache. About to Fetch from Network...');
-      return fetch(event.request.clone())
+      return fetch(request.clone())
         .then(function(resp) {
           /* if(resp.status === 404){
                   return caches.match('offline.html'); */
           var respClone = resp.clone();
           if (url.hostname === "unpkg.com") {
-            // console.log('Cache 1');
-            // console.log('Network Response',resp);
-            caches.open(MAP_CACHE).then(mc => mc.put(event.request, respClone));
+            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone));
           }
           if (url.pathname === "/fonts") {
-            // console.log('cache 2');
-            // console.log('Network Response',resp);
-            caches
-              .open(CACHE_NAME)
-              .then(mc => mc.put(event.request, respClone));
+            caches.open(CACHE_NAME).then(mc => mc.put(request, respClone));
           }
           if (url.hostname === "api.tiles.mapbox.com") {
-            // console.log('map cache');
-            caches.open(MAP_CACHE).then(mc => mc.put(event.request, respClone));
+            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone));
           }
-          /*
-                  caches.open(CACHE_NAME).then(function(cache){
-                    cache.put(event.request,respClone);
-                  }); */
           return resp;
         })
         .catch(function(error) {
-          console.log("[SW] Network Error", error);
+          // console.log("[SW] Network Error", error);
           return caches.match("offline.html", error);
         });
     })
