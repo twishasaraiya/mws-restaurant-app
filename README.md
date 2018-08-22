@@ -2,6 +2,7 @@
 ---
 
 ## Restaurant Reviews: Stage 2
+  A Progressive Web App that shows restaurants in your neighborhoods and their reviews. Works for all types of browser and it completely  responsive on all devices to provide rich user experience to all the users
 
 ### Contents
   1. [Getting Started](getting-started)
