@@ -18,6 +18,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 #### Installation
 
+**Client**
 1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
 
    Then Run `npm run build` to generate the build folder before running the project.
@@ -27,6 +28,10 @@ These instructions will get you a copy of the project up and running on your loc
 2. With your server running, visit the site: `http://localhost:8000`, and look around for a bit to see what the current experience looks like.
 3. Explore the provided code, and make start making a plan to implement the required features in three areas: responsive design, accessibility and offline use.
 4. Write code to implement the updates to get this site on its way to being a mobile-ready website.
+
+**Server** 
+
+To run the server please clone [this](https://github.com/twishasaraiya/mws-restaurant-stage-2) repository 
 
 ### Twitter Posts
 
