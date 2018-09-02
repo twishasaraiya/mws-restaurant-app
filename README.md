@@ -35,7 +35,19 @@ To run the server please clone [this](https://github.com/twishasaraiya/mws-resta
 
 ### Twitter Posts
 
-You can view all my posts related to projects I work on [here](https://twitter.com/SaraiyaTwisha)
+- [Accessibility and Responsiveness](https://twitter.com/SaraiyaTwisha/status/1007183566634184704)
+- [Testing Site](https://twitter.com/SaraiyaTwisha/status/1013012669127954434)
+- [**First Stage Completed**](https://twitter.com/SaraiyaTwisha/status/1013712600947978241)
+- [Add Custom Offline Page](https://twitter.com/SaraiyaTwisha/status/1014004158658170881)
+- [Lazy Loading Images](https://twitter.com/SaraiyaTwisha/status/1014381582629695488)
+- [Set Up Stage 2 Server](https://twitter.com/SaraiyaTwisha/status/1023929913139777536)
+- [Improved Performance](https://twitter.com/SaraiyaTwisha/status/1024321043668844544)
+- [Diving Into Gulp](https://twitter.com/SaraiyaTwisha/status/1025392697836748807)
+- [Progress So far](https://twitter.com/SaraiyaTwisha/status/1026521173713141760)
+- [Taming IndexedDB](https://twitter.com/SaraiyaTwisha/status/1027132448260481025)
+- [**Stage 2 Completed**](https://twitter.com/SaraiyaTwisha/status/1031922363716300800)
+
+You can view all my posts [here](https://twitter.com/SaraiyaTwisha)
 ### Note about ES6
 
 Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write. 
