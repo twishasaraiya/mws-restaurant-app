@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     es6: true
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  extends: 'eslint:recommended',
   parserOptions: {
     ecmaVersion: 2017,
     sourceType: 'module'
@@ -12,8 +12,8 @@ module.exports = {
   globals: {
     L: true
   },
-  plugins: ['prettier'],
+  plugins: [],
   rules: {
-    'prettier/prettier': ['error', { SingleQuote: true }]
+    quotes: ['error', 'single']
   }
 }
