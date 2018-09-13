@@ -5,7 +5,7 @@
   "main": "register-sw.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp build && gulp styles",
+    "build": "gulp minify-js && gulp minify-css",
     "start": "python -m http.server"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/twishasaraiya/mws-restaurant-stage-1#readme",
   "dependencies": {
     "babelify": "^8.0.0",
+    "browser-sync": "^2.24.7",
     "browserify": "^16.2.2",
     "eslint": "^5.3.0",
     "eslint-config-prettier": "^3.0.1",
