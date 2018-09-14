@@ -235,14 +235,15 @@ nav h1 a {
 	flex-direction: row;
 }
 .tabs{
-	color: white;
-	background: orange;
+	background: #fff;
 	text-align: center;
+	border: 1px solid #e7e7e7;
 	padding: 10px;
-	margin: 10px 10px 10px 0px;
+	border-radius: 5px;
+	margin: 10px 10px 10px 0;
 }
 .tabs span{
-	color: #fff;
+	color: #33373D;
 }
 #restaurant-name {
   color: #f18200;
@@ -290,7 +291,7 @@ nav h1 a {
     border: 1px solid lightgray;
     height: 30px;
     border-radius: 5px;
-    margin: 15px 0px;
+    margin-bottom: 15px;
 		text-indent: 35px
 }
 #review-form button{
@@ -386,9 +387,11 @@ nav h1 a {
 	margin: 20px;
 }
 .write-icon{
-	position: relative;
-	top: 3px;
-  left: 30px;
+	position: absolute;
+    left: 45px;
+    height: 1.5em;
+    width: 1.5em;
+    margin: 5px;
 }
 @media screen and (min-width: 425px){
 	nav h1{

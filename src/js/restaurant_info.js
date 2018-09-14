@@ -121,7 +121,6 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   cuisine.innerHTML = restaurant.cuisine_type
 
   const ip = document.getElementById('new-review')
-  console.log(ip)
   ip.setAttribute(
     'placeholder',
     `Help other foodies by sharing your review of ${restaurant.name}`
@@ -131,7 +130,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML()
   }
   // fill reviews
-  fillReviewsHTML()
+  fillReviewsHTML(restaurant.id)
 }
 
 /**
@@ -158,24 +157,28 @@ const fillRestaurantHoursHTML = (
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container')
-  const title = document.createElement('h2')
-  title.innerHTML = 'Reviews'
-  title.setAttribute('tabindex', '0')
-  container.appendChild(title)
+const fillReviewsHTML = id => {
+  DBHelper.fetchAllReviewsById(id).then(reviews => {
+    console.log('All reviews', reviews)
+    const container = document.getElementById('reviews-container')
+    const title = document.createElement('h2')
+    title.innerHTML = 'Reviews'
+    title.setAttribute('tabindex', '0')
+    container.appendChild(title)
 
-  if (!reviews) {
-    const noReviews = document.createElement('p')
-    noReviews.innerHTML = 'No reviews yet!'
-    container.appendChild(noReviews)
-    return
-  }
-  const ul = document.getElementById('reviews-list')
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review))
+    if (!reviews) {
+      const noReviews = document.createElement('p')
+      noReviews.innerHTML = 'No reviews yet!'
+      container.appendChild(noReviews)
+      return
+    }
+    const ul = document.getElementById('reviews-list')
+    reviews.forEach(review => {
+      console.log('REVIEW', review)
+      ul.appendChild(createReviewHTML(review))
+    })
+    container.appendChild(ul)
   })
-  container.appendChild(ul)
 }
 
 /**
@@ -191,7 +194,15 @@ const createReviewHTML = review => {
 
   const date = document.createElement('p')
   date.className = 'review-date'
-  date.innerHTML = review.date
+  var time = review.updatedAt - review.createdAt
+  var mins = time / 60
+  var hrs = mins / 60
+  var days = hrs / 60
+  if (time === 0) date.innerHTML = 'Updated Recently'
+  else if (days > 0) date.innerHTML = `Updated ${days} days ago`
+  else if (hrs > 0) date.innerHTML = `Updated ${hrs} hours ago`
+  else if (mins > 0) date.innerHTML = `Updated ${mins} mins ago`
+  else date.innerHTML = `Updated ${time} seconds ago`
   li.appendChild(date)
 
   const rating = document.createElement('p')
