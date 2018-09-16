@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchNeighborhoods()
   fetchCuisines()
 })
-
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -189,11 +188,16 @@ const createRestaurantHTML = restaurant => {
   li.append(image)
 
   const icon = document.createElement('img')
-  icon.setAttribute('src', '/public/icons/heart-regular.svg')
+  var icon_src = restaurant.is_favourite
+    ? '/public/icons/heart-solid.svg'
+    : '/public/icons/heart-regular.svg'
+  icon.setAttribute('src', icon_src)
   icon.setAttribute('width', '20em')
   icon.setAttribute('height', '20em')
-  icon.setAttribute('class', 'heart-icon')
-  icon.alt = 'like icon'
+  icon.setAttribute('id', 'heart-icon-' + restaurant.id)
+  icon.alt = 'Favorite icon'
+  icon.onclick = evt =>
+    handleFavoriteClick(restaurant.id, !restaurant.is_favourite)
   li.append(icon)
 
   const name = document.createElement('h3') // restaurant-name has less semantic importance than page title
@@ -241,3 +245,17 @@ const addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } */
+
+/**
+ * Handle click action on favorite icon
+ */
+
+const handleFavoriteClick = (id, newState) => {
+  var icon = document.getElementById('heart-icon-' + id)
+  var icon_src = newState
+    ? '/public/icons/heart-solid.svg'
+    : '/public/icons/heart-regular.svg'
+  icon.setAttribute('src', icon_src)
+  icon.onclick = evt => handleFavoriteClick(id, !newState)
+  DBHelper.handleFavoriteClick(id, newState)
+}

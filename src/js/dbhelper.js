@@ -256,6 +256,16 @@ class DBHelper {
     );
     return marker;
   } */
+
+  /**
+   * Update Favorite Restaurant
+   */
+  static handleFavoriteClick (id, newState) {
+    // console.log('DB', id, newState)
+    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${newState}`, {
+      method: 'put'
+    })
+  }
 }
 
 export default DBHelper

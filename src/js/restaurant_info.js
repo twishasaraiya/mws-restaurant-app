@@ -56,22 +56,6 @@ const initMap = () => {
   })
 }
 
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.log(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-} */
-
 /**
  * Get current restaurant from page URL.
  */
@@ -103,8 +87,17 @@ const fetchRestaurantFromURL = callback => {
  * Create restaurant HTML and add it to the webpage
  */
 const fillRestaurantHTML = (restaurant = self.restaurant) => {
+  console.log('R=', restaurant)
   const name = document.getElementById('restaurant-name')
   name.innerHTML = restaurant.name
+
+  const icon = document.getElementById('favorite-icon')
+  var icon_src = restaurant.is_favourite
+    ? '/public/icons/heart-solid.svg'
+    : '/public/icons/heart-regular.svg'
+  icon.setAttribute('src', icon_src)
+  icon.onclick = evt =>
+    handleFavoriteClick(restaurant.id, !restaurant.is_favourite)
 
   const address = document.getElementById('restaurant-address')
   address.setAttribute('aria-label', `Address ${restaurant.address}`)
@@ -159,7 +152,7 @@ const fillRestaurantHoursHTML = (
  */
 const fillReviewsHTML = id => {
   DBHelper.fetchAllReviewsById(id).then(reviews => {
-    console.log('All reviews', reviews)
+    // console.log('All reviews', reviews)
     const container = document.getElementById('reviews-container')
     const title = document.createElement('h2')
     title.innerHTML = 'Reviews'
@@ -174,7 +167,7 @@ const fillReviewsHTML = id => {
     }
     const ul = document.getElementById('reviews-list')
     reviews.forEach(review => {
-      console.log('REVIEW', review)
+      // console.log('REVIEW', review)
       ul.appendChild(createReviewHTML(review))
     })
     container.appendChild(ul)
@@ -277,3 +270,13 @@ function getRating (i) {
   }
 }
 const writeNewReview = () => {}
+
+const handleFavoriteClick = (id, newState) => {
+  var icon = document.getElementById('favorite-icon')
+  var icon_src = newState
+    ? '/public/icons/heart-solid.svg'
+    : '/public/icons/heart-regular.svg'
+  icon.setAttribute('src', icon_src)
+  icon.onclick = evt => handleFavoriteClick(id, !newState)
+  DBHelper.handleFavoriteClick(id, newState)
+}

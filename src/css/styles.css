@@ -382,9 +382,10 @@ nav h1 a {
 }
 
 /* ======================icons============================ */
-.heart-icon{
+img[id^='heart-icon']{
 	float: right;
 	margin: 20px;
+	cursor: pointer;
 }
 .write-icon{
 	position: absolute;
