@@ -17,10 +17,12 @@ document
   .addEventListener('click', writeNewReview)
 
 const stars = document.getElementsByClassName('star')
+var rating = -1
 for (var i = 0; i < stars.length; i++) {
   stars[i].addEventListener('click', function (evt) {
     // console.log(evt.target.id)
-    getRating(evt.target.id)
+    rating = evt.target.id
+    getRating()
   })
 }
 /**
@@ -87,12 +89,12 @@ const fetchRestaurantFromURL = callback => {
  * Create restaurant HTML and add it to the webpage
  */
 const fillRestaurantHTML = (restaurant = self.restaurant) => {
-  console.log('R=', restaurant)
+  // console.log('R=', restaurant)
   const name = document.getElementById('restaurant-name')
   name.innerHTML = restaurant.name
 
   const icon = document.getElementById('favorite-icon')
-  var icon_src = restaurant.is_favourite
+  var icon_src = restaurant.is_favorite
     ? '/public/icons/heart-solid.svg'
     : '/public/icons/heart-regular.svg'
   icon.setAttribute('src', icon_src)
@@ -113,7 +115,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   cuisine.setAttribute('aria-label', `Cuisine ${restaurant.cuisine_type}`)
   cuisine.innerHTML = restaurant.cuisine_type
 
-  const ip = document.getElementById('new-review')
+  const ip = document.getElementById('reviewer-comment')
   ip.setAttribute(
     'placeholder',
     `Help other foodies by sharing your review of ${restaurant.name}`
@@ -151,8 +153,7 @@ const fillRestaurantHoursHTML = (
  * Create all reviews HTML and add them to the webpage.
  */
 const fillReviewsHTML = id => {
-  DBHelper.fetchAllReviewsById(id).then(reviews => {
-    // console.log('All reviews', reviews)
+  DBHelper.fetchAllReviewsById(id, (reviews, error) => {
     const container = document.getElementById('reviews-container')
     const title = document.createElement('h2')
     title.innerHTML = 'Reviews'
@@ -241,9 +242,9 @@ const getParameterByName = (name, url) => {
 /**
  * Get Star Ratings
  */
-function getRating (i) {
+function getRating () {
   var reviewText = document.getElementById('review-type')
-  switch (i) {
+  switch (rating) {
     case '0':
       reviewText.innerHTML = 'Very Bad'
       break
@@ -262,6 +263,7 @@ function getRating (i) {
   }
   for (var k = 0; k <= stars.length; k++) {
     var elem = stars[k]
+    console.log('star', elem)
     var exists = elem.classList.contains('star-fill')
     if (k <= i && !exists) elem.classList.add('star-fill')
     else if (k > i && exists) {
@@ -269,9 +271,18 @@ function getRating (i) {
     }
   }
 }
-const writeNewReview = () => {}
+const writeNewReview = () => {
+  const name = document.getElementById('reviewer-name')
+  const comment = document.getElementById('reviewer-comment')
+  console.log('RES', name, comment, rating, self.restaurant.id)
+  if (name && rating && comment) {
+    // if none of the fields are empty
+    DBHelper.addNewReview(name, rating, comment)
+  }
+}
 
 const handleFavoriteClick = (id, newState) => {
+  console.log('RES INFO', id, newState)
   var icon = document.getElementById('favorite-icon')
   var icon_src = newState
     ? '/public/icons/heart-solid.svg'

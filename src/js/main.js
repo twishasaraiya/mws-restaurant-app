@@ -188,7 +188,7 @@ const createRestaurantHTML = restaurant => {
   li.append(image)
 
   const icon = document.createElement('img')
-  var icon_src = restaurant.is_favourite
+  var icon_src = restaurant.is_favorite
     ? '/public/icons/heart-solid.svg'
     : '/public/icons/heart-regular.svg'
   icon.setAttribute('src', icon_src)
@@ -197,7 +197,7 @@ const createRestaurantHTML = restaurant => {
   icon.setAttribute('id', 'heart-icon-' + restaurant.id)
   icon.alt = 'Favorite icon'
   icon.onclick = evt =>
-    handleFavoriteClick(restaurant.id, !restaurant.is_favourite)
+    handleFavoriteClick(restaurant.id, !restaurant.is_favorite)
   li.append(icon)
 
   const name = document.createElement('h3') // restaurant-name has less semantic importance than page title

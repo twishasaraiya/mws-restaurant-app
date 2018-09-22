@@ -33,12 +33,13 @@ class DBHelper {
     return idb.open('test-db', 1, upgradeDB => {
       // console.log('indexeDB created!');
       upgradeDB.createObjectStore('restaurants', { keyPath: 'id' })
+      upgradeDB.createObjectStore('reviews', { keyPath: 'id' })
     })
   }
   /*
    * Add restaurant to indexeDB
    */
-  static addToIdb (data) {
+  static addRestaurantToIdb (data) {
     const dbPromise = DBHelper.openIdb()
     return dbPromise.then(db => {
       var tx = db.transaction('restaurants', 'readwrite')
@@ -47,10 +48,26 @@ class DBHelper {
       return tx.complete
     })
   }
+
+  /*
+  * Add Review to Indexeddb
+  */
+  static addReviewsToIdb (data) {
+    const dbPromise = DBHelper.openIdb()
+    return dbPromise.then(db => {
+      var tx = db.transaction('reviews', 'readwrite')
+      var store = tx.objectStore('reviews')
+      data.map(review => {
+        store.put(review)
+      })
+      return tx.complete
+    })
+  }
+
   /*
    * Fetch Data from indexeDB
    */
-  static fetchFromIdb () {
+  static fetchRestaurantFromIDb () {
     const dbPromise = DBHelper.openIdb()
     return dbPromise.then(db => {
       var tx = db.transaction('restaurants', 'readonly')
@@ -58,12 +75,28 @@ class DBHelper {
       return store.getAll()
     })
   }
+
+  /*
+  * Fetch all Reviews for Restaurant ID
+  */
+  static fetchReviewsFromIdb (id) {
+    const dbPromise = DBHelper.openIdb()
+    return dbPromise
+      .then(db => {
+        var tx = db.transaction('reviews', 'readonly')
+        var store = tx.objectStore('reviews')
+        return store.getAll()
+      })
+      .then(reviews => {
+        return reviews.filter(review => review.restaurant_id === id)
+      })
+  }
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants (callback) {
     // console.log('fetchRestaurants');
-    DBHelper.fetchFromIdb().then(idbResp => {
+    DBHelper.fetchRestaurantFromIDb().then(idbResp => {
       // console.log('idb response',idbResp);
       if (idbResp.length > 0) {
         // found in IDB
@@ -76,7 +109,7 @@ class DBHelper {
           .then(resp => resp.json())
           .then(data => {
             // console.log('Data',data);
-            DBHelper.addToIdb(data)
+            DBHelper.addRestaurantToIdb(data)
             callback(null, data)
           })
           .catch(err => callback(err, null))
@@ -84,14 +117,27 @@ class DBHelper {
     })
   }
   /**
-   * Fetch reviews for restaurant idea
+   * Fetch reviews for restaurant id
    */
-  static fetchAllReviewsById (id) {
-    const URL = DBHelper.REVIEW_URL(id)
-    // console.log('URL', URL)
-    return fetch(URL, {
-      method: 'get'
-    }).then(resp => resp.json())
+  static fetchAllReviewsById (id, callback) {
+    DBHelper.fetchReviewsFromIdb(id).then(idbResp => {
+      if (idbResp.length > 0) {
+        // console.log('reviews from idb', idbResp)
+        callback(idbResp, null)
+      } else {
+        const URL = DBHelper.REVIEW_URL(id)
+        // console.log('URL', URL)
+        return fetch(URL, {
+          method: 'get'
+        })
+          .then(resp => resp.json())
+          .then(data => {
+            DBHelper.addReviewsToIdb(data)
+            callback(data, null)
+          })
+          .catch(err => callback(null, err))
+      }
+    })
   }
 
   /**
@@ -261,11 +307,50 @@ class DBHelper {
    * Update Favorite Restaurant
    */
   static handleFavoriteClick (id, newState) {
-    // console.log('DB', id, newState)
+    console.log('DB', id, newState)
+    // update cached restaurant data
+    const dbPromise = DBHelper.openIdb()
+    // get the cache restaurant data
+    dbPromise
+      .then(db => {
+        var tx = db.transaction('restaurants', 'readonly')
+        var store = tx.objectStore('restaurants')
+        return store.get(id)
+      })
+      .then(val => {
+        if (!val) {
+          console.log('No such data exists in cache')
+          return
+        }
+        // update the cache restaurant data
+        val.is_favorite = newState
+        dbPromise
+          .then(db => {
+            var tx = db.transaction('restaurants', 'readwrite')
+            var store = tx.objectStore('restaurants')
+            store.put(val)
+            return tx.complete
+          })
+          .then(() => {
+            console.log('cache data updated')
+          })
+      })
+    // Update the original data
     fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${newState}`, {
       method: 'put'
     })
+      .then(() => {
+        console.log('database updated')
+      })
+      .catch(err => {
+        console.log('database could not be updated', err)
+      })
   }
+
+  /**
+   *
+   */
+  static addNewReview (name, rating, comment) {}
 }
 
 export default DBHelper
