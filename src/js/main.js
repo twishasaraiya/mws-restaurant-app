@@ -195,7 +195,8 @@ const createRestaurantHTML = restaurant => {
   icon.setAttribute('width', '20em')
   icon.setAttribute('height', '20em')
   icon.setAttribute('id', 'heart-icon-' + restaurant.id)
-  icon.alt = 'Favorite icon'
+  icon.setAttribute('tabindex', '0')
+  icon.alt = `Favorite icon for ${restaurant.name}`
   icon.onclick = evt =>
     handleFavoriteClick(restaurant.id, !restaurant.is_favorite)
   li.append(icon)
