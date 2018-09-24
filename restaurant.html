@@ -68,25 +68,25 @@
     <!-- end restaurant -->
 
     <!-- Beginning write review section -->
-    <section id="review-form">
-        <h3>Rate</h3>
-        <div>
-          <span class='star' id='0'>★</span>
-          <span class='star' id='1'>★</span>
-          <span class='star' id='2'>★</span>
-          <span class='star' id='3'>★</span>
-          <span class='star' id='4'>★</span>
+    <section role="form" id="review-form">
+        <label>Rate</label>
+        <div tabindex="0">
+          <span aria-role="checkbox" class='star' id='0'>★</span>
+          <span aria-role="checkbox" class='star' id='1'>★</span>
+          <span aria-role="checkbox" class='star' id='2'>★</span>
+          <span aria-role="checkbox" class='star' id='3'>★</span>
+          <span aria-role="checkbox" class='star' id='4'>★</span>
           <span id='review-type'> Tap a star to rate </span>
         </div>
         <div>
-          <h3 tabindex="0">Name</h3>
-          <input type="text" id="reviewer-name" />
+          <label>Name</label>
+          <input type="text" id="reviewer-name" aria-label="Name of reviewer" aria-required="true" />
         </div>
       <div>
-        <h3 tabindex="0">Write a review</h3>
-        <input type="text" id="reviewer-comment" />
+        <label>Write a review</label>
+        <input type="text" id="reviewer-comment"  aria-label="Comments of reviewer" aria-required="true" />
       </div>
-      <button id='submit-review' type="submit">Add your Review</submit>
+      <button id='submit-review' type="submit" role="button" aria-describedby="Click to save review">Add your Review</submit>
     </section>
     <!-- end Write review section -->
 
