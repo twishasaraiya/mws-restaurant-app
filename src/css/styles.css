@@ -286,13 +286,13 @@ nav h1 a {
 	width: 45%;
 	padding: 20px 40px;
 }
-#new-review{
+#review-form input[type='text']{
 	width: 100%;
     border: 1px solid lightgray;
     height: 30px;
     border-radius: 5px;
     margin-bottom: 15px;
-		text-indent: 35px
+		text-indent: 15px
 }
 #review-form button{
 	border: 0px;
@@ -301,6 +301,7 @@ nav h1 a {
 	height: auto;
 	border-radius: 5px;
 	padding: 12px;
+	cursor: pointer;
 }
 .star{
 	color: #999;
