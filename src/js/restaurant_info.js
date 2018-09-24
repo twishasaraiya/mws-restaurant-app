@@ -10,11 +10,37 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 /**
- * Add event listeners
+ * Add New Review
  */
-document
-  .getElementById('submit-review')
-  .addEventListener('click', writeNewReview)
+document.getElementById('submit-review').addEventListener('click', evt => {
+  console.log('evt', evt)
+  const name = document.getElementById('reviewer-name').value
+  const comment = document.getElementById('reviewer-comment').value
+  if (name && rating && comment) {
+    // if none of the fields are empty
+    DBHelper.addNewReview(
+      name,
+      comment,
+      rating,
+      self.restaurant.id,
+      (resp, err) => {
+        if (err) {
+          console.log('Submit Review Failed')
+          return
+        }
+        // reset the form
+        name.value = ''
+        comment.value = ''
+        stars.map(star => {
+          if (star.classList.contains('starfill')) {
+            star.classList.remove('stat-fill')
+          }
+        })
+      }
+      // disable the button , to allow only review per user
+    )
+  }
+})
 
 const stars = document.getElementsByClassName('star')
 var rating = -1
@@ -22,7 +48,7 @@ for (var i = 0; i < stars.length; i++) {
   stars[i].addEventListener('click', function (evt) {
     // console.log(evt.target.id)
     rating = evt.target.id
-    getRating()
+    getRating(rating)
   })
 }
 /**
@@ -107,6 +133,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img')
   image.setAttribute('aria-role', 'img')
+  image.setAttribute('aria-label', `Image for ${restaurant.name}`)
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant)
   image.alt = restaurant.name
@@ -154,6 +181,7 @@ const fillRestaurantHoursHTML = (
  */
 const fillReviewsHTML = id => {
   DBHelper.fetchAllReviewsById(id, (reviews, error) => {
+    if (error) return
     const container = document.getElementById('reviews-container')
     const title = document.createElement('h2')
     title.innerHTML = 'Reviews'
@@ -188,11 +216,14 @@ const createReviewHTML = review => {
 
   const date = document.createElement('p')
   date.className = 'review-date'
-  var time = review.updatedAt - review.createdAt
-  var mins = time / 60
-  var hrs = mins / 60
-  var days = hrs / 60
+  const millis = Date.now() - review.updatedAt
+  const time = Math.floor(millis / 1000)
+  var mins = Math.floor(time / 60)
+  var hrs = Math.floor(mins / 60)
+  var days = Math.floor(hrs / 24)
+  var months = Math.floor(days / 30)
   if (time === 0) date.innerHTML = 'Updated Recently'
+  else if (months > 0) date.innerHTML = `Updated ${months} months ago`
   else if (days > 0) date.innerHTML = `Updated ${days} days ago`
   else if (hrs > 0) date.innerHTML = `Updated ${hrs} hours ago`
   else if (mins > 0) date.innerHTML = `Updated ${mins} mins ago`
@@ -206,6 +237,7 @@ const createReviewHTML = review => {
   icon.setAttribute('src', '/public/icons/star-solid.svg')
   icon.setAttribute('width', '15em')
   icon.setAttribute('height', '15em')
+  icon.setAttribute('alt', 'star icon')
   rating.appendChild(icon)
   li.appendChild(rating)
   const comments = document.createElement('p')
@@ -242,9 +274,9 @@ const getParameterByName = (name, url) => {
 /**
  * Get Star Ratings
  */
-function getRating () {
+function getRating (i) {
   var reviewText = document.getElementById('review-type')
-  switch (rating) {
+  switch (i) {
     case '0':
       reviewText.innerHTML = 'Very Bad'
       break
@@ -261,9 +293,8 @@ function getRating () {
       reviewText.innerHTML = 'Excellent'
       break
   }
-  for (var k = 0; k <= stars.length; k++) {
+  for (var k = 0; k < stars.length; k++) {
     var elem = stars[k]
-    console.log('star', elem)
     var exists = elem.classList.contains('star-fill')
     if (k <= i && !exists) elem.classList.add('star-fill')
     else if (k > i && exists) {
@@ -271,18 +302,9 @@ function getRating () {
     }
   }
 }
-const writeNewReview = () => {
-  const name = document.getElementById('reviewer-name')
-  const comment = document.getElementById('reviewer-comment')
-  console.log('RES', name, comment, rating, self.restaurant.id)
-  if (name && rating && comment) {
-    // if none of the fields are empty
-    DBHelper.addNewReview(name, rating, comment)
-  }
-}
 
 const handleFavoriteClick = (id, newState) => {
-  console.log('RES INFO', id, newState)
+  // console.log('RES INFO', id, newState)
   var icon = document.getElementById('favorite-icon')
   var icon_src = newState
     ? '/public/icons/heart-solid.svg'

@@ -9,15 +9,22 @@ class DBHelper {
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
-  static get DATABASE_URL () {
+  static get RESTAURANTS_URL () {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`
+  }
+  /**
+   * Stage 3 : All reviews url
+   */
+  static get REVIEWS_URL () {
+    const port = 1337
+    return `http://localhost:${port}/reviews/`
   }
 
   /**
    * Stage 3 : Fetch Review By id
    */
-  static REVIEW_URL (id) {
+  static RESTAURANT_REVIEW_URL (id) {
     const port = 1337
     return `http://localhost:${port}/reviews/?restaurant_id=${id}`
   }
@@ -34,6 +41,10 @@ class DBHelper {
       // console.log('indexeDB created!');
       upgradeDB.createObjectStore('restaurants', { keyPath: 'id' })
       upgradeDB.createObjectStore('reviews', { keyPath: 'id' })
+      upgradeDB.createObjectStore('pending', {
+        keyPath: 'id',
+        autoIncrement: true
+      })
     })
   }
   /*
@@ -103,7 +114,7 @@ class DBHelper {
         return callback(null, idbResp)
       } else {
         // not found try to fetch from Network
-        fetch(DBHelper.DATABASE_URL, {
+        fetch(DBHelper.RESTAURANTS_URL, {
           method: 'get'
         })
           .then(resp => resp.json())
@@ -120,18 +131,22 @@ class DBHelper {
    * Fetch reviews for restaurant id
    */
   static fetchAllReviewsById (id, callback) {
+    const currTime = Date.now()
     DBHelper.fetchReviewsFromIdb(id).then(idbResp => {
       if (idbResp.length > 0) {
         // console.log('reviews from idb', idbResp)
         callback(idbResp, null)
       } else {
-        const URL = DBHelper.REVIEW_URL(id)
+        const URL = DBHelper.RESTAURANT_REVIEW_URL(id)
         // console.log('URL', URL)
         return fetch(URL, {
           method: 'get'
         })
           .then(resp => resp.json())
           .then(data => {
+            data.sort(
+              (a, b) => currTime - a.updatedAt - (currTime - b.updatedAt)
+            )
             DBHelper.addReviewsToIdb(data)
             callback(data, null)
           })
@@ -348,9 +363,31 @@ class DBHelper {
   }
 
   /**
-   *
+   *  Add New Review
    */
-  static addNewReview (name, rating, comment) {}
+  static addNewReview (name, comment, rating, id, callback) {
+    const body = {
+      restaurant_id: id,
+      name: name,
+      rating: rating,
+      comments: comment,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    }
+    console.log('sending obj', body)
+    // add to Database
+    fetch(DBHelper.REVIEWS_URL, {
+      method: 'post',
+      body: JSON.stringify(body)
+    })
+      .then(resp => {
+        console.log('POST resp', resp)
+        location.reload()
+        callback()
+      })
+      .catch(err => console.log('post request failed', err))
+    // add to idb
+  }
 }
 
 export default DBHelper
