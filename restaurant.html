@@ -45,12 +45,12 @@
       <!-- restaurant-name has less semantic importance than page title -->
       <h3 id="restaurant-name" tabindex="0"></h3>
       <div class='tab-container'>
-        <div class="tabs" tabindex="0">
+        <div aria-role='button' class="tabs" tabindex="0">
             <img width="15em" height="15em" id='favorite-icon' alt='favorite icon'>
             <span>Like</span>
         </div>
 
-        <div class="tabs" tabindex="0">
+        <div aria-role='button' class="tabs" tabindex="0">
             <a href="#review-form">
               <img src="/public/icons/pen-solid.svg" width="15em" height="15em">
               <span>Write a Review</span>
@@ -69,6 +69,7 @@
 
     <!-- Beginning write review section -->
     <section role="form" id="review-form">
+      <h3>Write a Review</h3>
         <label>Rate</label>
         <div tabindex="0">
           <span aria-role="checkbox" class='star' id='0'>★</span>
@@ -80,13 +81,13 @@
         </div>
         <div>
           <label>Name</label>
-          <input type="text" id="reviewer-name" aria-label="Name of reviewer" aria-required="true" />
+          <input role='textbox' type="text" id="reviewer-name" aria-label="Enter name of reviewer" aria-required="true" />
         </div>
       <div>
-        <label>Write a review</label>
-        <input type="text" id="reviewer-comment"  aria-label="Comments of reviewer" aria-required="true" />
+        <label>Comment</label>
+        <input type="text" role='textbox' id="reviewer-comment"  aria-label="Enter comments of reviewer" aria-required="true" />
       </div>
-      <button id='submit-review' type="submit" role="button" aria-describedby="Click to save review">Add your Review</submit>
+      <button id='submit-review' type="submit" role="button" aria-label="Click to save review">Add your Review</submit>
     </section>
     <!-- end Write review section -->
 
