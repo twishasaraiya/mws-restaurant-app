@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
  * Add New Review
  */
 document.getElementById('submit-review').addEventListener('click', evt => {
-  console.log('evt', evt)
-  const name = document.getElementById('reviewer-name').value
-  const comment = document.getElementById('reviewer-comment').value
+  // console.log('evt', evt.target)
+  const name = document.getElementById('reviewer-name')
+  const comment = document.getElementById('reviewer-comment')
   if (name && rating && comment) {
     // if none of the fields are empty
     DBHelper.addNewReview(
-      name,
-      comment,
+      name.value,
+      comment.value,
       rating,
       self.restaurant.id,
       (resp, err) => {
@@ -31,14 +31,16 @@ document.getElementById('submit-review').addEventListener('click', evt => {
         // reset the form
         name.value = ''
         comment.value = ''
-        stars.map(star => {
-          if (star.classList.contains('starfill')) {
-            star.classList.remove('stat-fill')
+        for (var i = 0; i < stars.length; i++) {
+          if (stars[i].classList.contains('starfill')) {
+            stars[i].classList.remove('star-fill')
           }
-        })
+        }
       }
-      // disable the button , to allow only review per user
     )
+    // disable the button , to allow only review per user
+    evt.target.disabled = true
+    evt.target.style.cursor = 'noy-allowed'
   }
 })
 

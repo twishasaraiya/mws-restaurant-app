@@ -4,6 +4,22 @@
 
 import idb from 'idb'
 
+window.addEventListener('online', () => {
+  console.log('online')
+  // check if any requests exist in objectStore
+  var dbPromise = DBHelper.openIdb()
+  dbPromise.then(db => {
+    db.transaction('pending', 'readonly')
+      .objectStore('pending')
+      .count()
+      .then(req => {
+        console.log('Pending requests', req)
+
+        if (req > 0) DBHelper.commitPendingRequests()
+      })
+  })
+})
+
 class DBHelper {
   /**
    * Database URL.
@@ -19,14 +35,6 @@ class DBHelper {
   static get REVIEWS_URL () {
     const port = 1337
     return `http://localhost:${port}/reviews/`
-  }
-
-  /**
-   * Stage 3 : Fetch Review By id
-   */
-  static RESTAURANT_REVIEW_URL (id) {
-    const port = 1337
-    return `http://localhost:${port}/reviews/?restaurant_id=${id}`
   }
   /**
    * Create Indexed DB
@@ -63,14 +71,12 @@ class DBHelper {
   /*
   * Add Review to Indexeddb
   */
-  static addReviewsToIdb (data) {
+  static addReviewToIdb (review) {
     const dbPromise = DBHelper.openIdb()
     return dbPromise.then(db => {
       var tx = db.transaction('reviews', 'readwrite')
       var store = tx.objectStore('reviews')
-      data.map(review => {
-        store.put(review)
-      })
+      store.put(review)
       return tx.complete
     })
   }
@@ -135,9 +141,12 @@ class DBHelper {
     DBHelper.fetchReviewsFromIdb(id).then(idbResp => {
       if (idbResp.length > 0) {
         // console.log('reviews from idb', idbResp)
+        idbResp.sort(
+          (a, b) => currTime - a.updatedAt - (currTime - b.updatedAt)
+        )
         callback(idbResp, null)
       } else {
-        const URL = DBHelper.RESTAURANT_REVIEW_URL(id)
+        const URL = DBHelper.REVIEWS_URL + '?restaurant_id=' + id
         // console.log('URL', URL)
         return fetch(URL, {
           method: 'get'
@@ -147,7 +156,7 @@ class DBHelper {
             data.sort(
               (a, b) => currTime - a.updatedAt - (currTime - b.updatedAt)
             )
-            DBHelper.addReviewsToIdb(data)
+            data.map(review => DBHelper.addReviewToIdb(review))
             callback(data, null)
           })
           .catch(err => callback(null, err))
@@ -366,7 +375,8 @@ class DBHelper {
    *  Add New Review
    */
   static addNewReview (name, comment, rating, id, callback) {
-    const body = {
+    let body = {
+      id: Date.now(),
       restaurant_id: id,
       name: name,
       rating: rating,
@@ -375,18 +385,85 @@ class DBHelper {
       updatedAt: Date.now()
     }
     console.log('sending obj', body)
-    // add to Database
-    fetch(DBHelper.REVIEWS_URL, {
+    // update reviews indexeDB
+    DBHelper.addReviewToIdb(body)
+    // add to Database if online
+    // else add to pending  request queue
+    if (navigator.onLine) {
+      DBHelper.sendReviewToDatabase(DBHelper.REVIEWS_URL, 'POST', body)
+    } else DBHelper.addRequestToQueue(DBHelper.REVIEWS_URL, 'POST', body)
+
+    callback(null, null)
+  }
+  static addRequestToQueue (url = '', method, body) {
+    var dbPromise = DBHelper.openIdb()
+    return dbPromise.then(db => {
+      var tx = db.transaction('pending', 'readwrite')
+      var store = tx.objectStore('pending')
+      store.add({
+        url: url,
+        method: method,
+        body: body
+      })
+    })
+  }
+
+  static sendReviewToDatabase (url = '', method, body) {
+    fetch(url, {
       method: 'post',
       body: JSON.stringify(body)
     })
       .then(resp => {
         console.log('POST resp', resp)
         location.reload()
-        callback()
       })
       .catch(err => console.log('post request failed', err))
-    // add to idb
+  }
+
+  static commitPendingRequests () {
+    console.log('in commit pending req')
+    DBHelper.tryComittingPendingRequests(DBHelper.commitPendingRequests)
+  }
+  static tryComittingPendingRequests (callback) {
+    console.log('Trying to commit pending requests')
+    var dbPromise = DBHelper.openIdb()
+    dbPromise.then(db => {
+      var tx = db.transaction('pending', 'readwrite')
+      tx.objectStore('pending')
+        .openCursor()
+        .then(cursor => {
+          if (!cursor) {
+            return
+          }
+          let url = cursor.value.url
+          let method = cursor.value.method
+          let body = cursor.value.body
+
+          // if we have bad record delete it
+          if (!url || !method || (method === 'post' && !body)) {
+            cursor.delete()
+            callback()
+            return
+          }
+          console.log('sending fetch', url, method, body)
+          fetch(url, {
+            method: method,
+            body: JSON.stringify(body)
+          })
+            .then(resp => {
+              if (!resp.ok) return
+            })
+            .then(() => {
+              // start new transaction to delete
+              db.transaction('pending', 'readwrite')
+                .objectStore('pending')
+                .openCursor()
+                .then(cursor => {
+                  cursor.delete().then(() => callback())
+                })
+            })
+        })
+    })
   }
 }
 
