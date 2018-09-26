@@ -1,5 +1,5 @@
-const CACHE_NAME = 'mws-v2';
-const MAP_CACHE = 'map-cache';
+const CACHE_NAME = 'mws-v2'
+const MAP_CACHE = 'map-cache'
 const respImages = [
   'dist/img/1.webp',
   'dist/img/1-300.webp',
@@ -31,8 +31,13 @@ const respImages = [
   'dist/img/10.webp',
   'dist/img/10-300.webp',
   'dist/img/10-600.webp'
-];
-
+]
+var icons = [
+  '/public/icons/heart-regular.svg',
+  '/public/icons/heart-solid.svg',
+  '/public/icons/pen-solid.svg',
+  '/public/icons/star-solid.svg'
+]
 var filesToCache = [
   '/',
   'dist/css/styles.min.css',
@@ -45,48 +50,49 @@ var filesToCache = [
   'src/js/lazy-load.js', // TODO browserify and uglify
   '/sw.js',
   '/public/icons/icon.ico',
+  ...icons,
   ...respImages
-];
-var allCaches = [CACHE_NAME, MAP_CACHE];
+]
+var allCaches = [CACHE_NAME, MAP_CACHE]
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   // console.log('[Service Worker] Install');
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then(function(cache) {
-        return cache.addAll(filesToCache);
+      .then(function (cache) {
+        return cache.addAll(filesToCache)
       })
       .then(self.skipWaiting())
-  );
-});
+  )
+})
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function (event) {
   // console.log('[Service Worker] Activate');
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(function (cacheNames) {
       return Promise.all(
         cacheNames
-          .filter(function(cacheName) {
+          .filter(function (cacheName) {
             return (
               cacheName.startsWith('mws-') && !allCaches.includes(cacheName)
-            );
+            )
           })
-          .map(function(cacheName) {
+          .map(function (cacheName) {
             // console.log('Deleting ',cacheName);
-            return caches.delete(cacheName);
+            return caches.delete(cacheName)
           })
-      );
+      )
     })
-  );
-});
+  )
+})
 
-self.addEventListener('fetch', function(event) {
-  var url = new URL(event.request.url);
-  let request = event.request;
+self.addEventListener('fetch', function (event) {
+  var url = new URL(event.request.url)
+  let request = event.request
   // console.log('fetch', url)
   if (url.pathname === '/restaurant.html') {
-    request = '/restaurant.html';
+    request = '/restaurant.html'
     // console.log("Change url", request);
   }
 
@@ -96,33 +102,33 @@ self.addEventListener('fetch', function(event) {
     })
   ); */
   event.respondWith(
-    caches.match(request).then(function(cacheResponse) {
+    caches.match(request).then(function (cacheResponse) {
       if (cacheResponse) {
         //  console.log("cache resp for", url);
-        return cacheResponse;
+        return cacheResponse
       }
 
       // console.log('No response from cache. About to Fetch from Network...');
       return fetch(request.clone())
-        .then(function(resp) {
+        .then(function (resp) {
           /* if(resp.status === 404){
                   return caches.match('offline.html'); */
-          var respClone = resp.clone();
+          var respClone = resp.clone()
           if (url.hostname === 'unpkg.com') {
-            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone));
+            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone))
           }
           if (url.pathname === '/fonts') {
-            caches.open(CACHE_NAME).then(mc => mc.put(request, respClone));
+            caches.open(CACHE_NAME).then(mc => mc.put(request, respClone))
           }
           if (url.hostname === 'api.tiles.mapbox.com') {
-            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone));
+            caches.open(MAP_CACHE).then(mc => mc.put(request, respClone))
           }
-          return resp;
+          return resp
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // console.log("[SW] Network Error", error);
-          return caches.match('offline.html', error);
-        });
+          return caches.match('offline.html', error)
+        })
     })
-  );
-});
+  )
+})
