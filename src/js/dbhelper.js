@@ -360,15 +360,22 @@ class DBHelper {
           })
       })
     // Update the original data
-    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${newState}`, {
-      method: 'put'
-    })
-      .then(() => {
-        console.log('database updated')
+    // if online send the fetch request else add to pending queue
+    var url = DBHelper.RESTAURANTS_URL + `/${id}/?is_favorite=${newState}`
+    var method = 'put'
+    if (navigator.onLine) {
+      fetch(url, {
+        method: method
       })
-      .catch(err => {
-        console.log('database could not be updated', err)
-      })
+        .then(() => {
+          console.log('database updated')
+        })
+        .catch(err => {
+          console.log('database could not be updated', err)
+        })
+    } else {
+      DBHelper.addRequestToQueue(url, method, null)
+    }
   }
 
   /**
@@ -415,7 +422,6 @@ class DBHelper {
     })
       .then(resp => {
         console.log('POST resp', resp)
-        location.reload()
       })
       .catch(err => console.log('post request failed', err))
   }

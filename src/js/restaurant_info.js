@@ -16,32 +16,36 @@ document.getElementById('submit-review').addEventListener('click', evt => {
   // console.log('evt', evt.target)
   const name = document.getElementById('reviewer-name')
   const comment = document.getElementById('reviewer-comment')
-  if (name && rating && comment) {
-    // if none of the fields are empty
-    DBHelper.addNewReview(
-      name.value,
-      comment.value,
-      rating,
-      self.restaurant.id,
-      (resp, err) => {
-        if (err) {
-          console.log('Submit Review Failed')
-          return
-        }
-        // reset the form
-        name.value = ''
-        comment.value = ''
-        for (var i = 0; i < stars.length; i++) {
-          if (stars[i].classList.contains('starfill')) {
-            stars[i].classList.remove('star-fill')
-          }
+  if (name.value == '' || comment.value == '' || rating == -1) {
+    alert('Please fill all the fields')
+    return
+  }
+  // if none of the fields are empty
+  DBHelper.addNewReview(
+    name.value,
+    comment.value,
+    rating,
+    self.restaurant.id,
+    (resp, err) => {
+      if (err) {
+        console.log('Submit Review Failed')
+        return
+      }
+      // reset the form
+      name.value = ''
+      comment.value = ''
+      for (var i = 0; i < stars.length; i++) {
+        if (stars[i].classList.contains('star-fill')) {
+          stars[i].classList.remove('star-fill')
         }
       }
-    )
-    // disable the button , to allow only review per user
-    evt.target.disabled = true
-    evt.target.style.cursor = 'noy-allowed'
-  }
+    }
+  )
+  // disable the button , to disallow multiple clicks
+  evt.target.disabled = true
+  evt.target.style.cursor = 'not-allowed'
+  console.log('location', location)
+  location.reload()
 })
 
 const stars = document.getElementsByClassName('star')
