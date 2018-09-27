@@ -41,6 +41,7 @@ var icons = [
 var filesToCache = [
   '/',
   'dist/css/styles.min.css',
+  'dist/css/restaurant_info_styles.min.css',
   'dist/js/restaurant.bundle.js',
   'dist/js/main.bundle.js',
   'index.html',
