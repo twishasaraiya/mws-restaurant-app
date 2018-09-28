@@ -31,7 +31,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 **Server** 
 
-To run the server please clone [this](https://github.com/twishasaraiya/mws-restaurant-stage-2) repository 
+To run the server please clone [this](https://github.com/twishasaraiya/mws-restaurant-stage-3) repository 
 
 ### Twitter Posts
 
