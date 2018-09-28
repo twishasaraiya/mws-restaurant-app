@@ -5,7 +5,6 @@
 import idb from 'idb'
 
 window.addEventListener('online', () => {
-  console.log('online')
   // check if any requests exist in objectStore
   var dbPromise = DBHelper.openIdb()
   dbPromise.then(db => {
@@ -13,7 +12,7 @@ window.addEventListener('online', () => {
       .objectStore('pending')
       .count()
       .then(req => {
-        console.log('Pending requests', req)
+        // console.log('Pending requests', req)
 
         if (req > 0) DBHelper.commitPendingRequests()
       })
@@ -331,7 +330,6 @@ class DBHelper {
    * Update Favorite Restaurant
    */
   static handleFavoriteClick (id, newState) {
-    console.log('DB', id, newState)
     // update cached restaurant data
     const dbPromise = DBHelper.openIdb()
     // get the cache restaurant data
@@ -343,7 +341,7 @@ class DBHelper {
       })
       .then(val => {
         if (!val) {
-          console.log('No such data exists in cache')
+          // console.log('No such data exists in cache')
           return
         }
         // update the cache restaurant data
@@ -356,7 +354,7 @@ class DBHelper {
             return tx.complete
           })
           .then(() => {
-            console.log('cache data updated')
+            // console.log('cache data updated')
           })
       })
     // Update the original data
@@ -368,10 +366,10 @@ class DBHelper {
         method: method
       })
         .then(() => {
-          console.log('database updated')
+          // console.log('database updated')
         })
         .catch(err => {
-          console.log('database could not be updated', err)
+          // console.log('database could not be updated', err)
         })
     } else {
       DBHelper.addRequestToQueue(url, method, null)
@@ -391,7 +389,6 @@ class DBHelper {
       createdAt: Date.now(),
       updatedAt: Date.now()
     }
-    console.log('sending obj', body)
     // update reviews indexeDB
     DBHelper.addReviewToIdb(body)
     // add to Database if online
@@ -421,17 +418,19 @@ class DBHelper {
       body: JSON.stringify(body)
     })
       .then(resp => {
-        console.log('POST resp', resp)
+        // console.log('POST resp', resp)
       })
-      .catch(err => console.log('post request failed', err))
+      .catch(err => {
+        /* console.log('post request failed', err) */
+      })
   }
 
   static commitPendingRequests () {
-    console.log('in commit pending req')
+    // console.log('in commit pending req')
     DBHelper.tryComittingPendingRequests(DBHelper.commitPendingRequests)
   }
   static tryComittingPendingRequests (callback) {
-    console.log('Trying to commit pending requests')
+    // console.log('Trying to commit pending requests')
     var dbPromise = DBHelper.openIdb()
     dbPromise.then(db => {
       var tx = db.transaction('pending', 'readwrite')
@@ -451,7 +450,7 @@ class DBHelper {
             callback()
             return
           }
-          console.log('sending fetch', url, method, body)
+          // console.log('sending fetch', url, method, body)
           fetch(url, {
             method: method,
             body: JSON.stringify(body)

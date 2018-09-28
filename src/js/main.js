@@ -197,7 +197,7 @@ const createRestaurantHTML = restaurant => {
   icon.setAttribute('id', 'heart-icon-' + restaurant.id)
   icon.setAttribute('tabindex', '0')
   icon.alt = `Favorite icon for ${restaurant.name}`
-  icon.onclick = evt =>
+  icon.onclick = () =>
     handleFavoriteClick(restaurant.id, !restaurant.is_favorite)
   li.append(icon)
 
@@ -257,6 +257,6 @@ const handleFavoriteClick = (id, newState) => {
     ? '/public/icons/heart-solid.svg'
     : '/public/icons/heart-regular.svg'
   icon.setAttribute('src', icon_src)
-  icon.onclick = evt => handleFavoriteClick(id, !newState)
+  icon.onclick = () => handleFavoriteClick(id, !newState)
   DBHelper.handleFavoriteClick(id, newState)
 }

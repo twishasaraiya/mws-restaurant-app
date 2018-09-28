@@ -28,7 +28,7 @@ document.getElementById('submit-review').addEventListener('click', evt => {
     self.restaurant.id,
     (resp, err) => {
       if (err) {
-        console.log('Submit Review Failed')
+        // console.log('Submit Review Failed')
         return
       }
       // reset the form
@@ -44,7 +44,7 @@ document.getElementById('submit-review').addEventListener('click', evt => {
   // disable the button , to disallow multiple clicks
   evt.target.disabled = true
   evt.target.style.cursor = 'not-allowed'
-  console.log('location', location)
+  // console.log('location', location)
   location.reload()
 })
 
@@ -130,7 +130,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     ? '/public/icons/heart-solid.svg'
     : '/public/icons/heart-regular.svg'
   icon.setAttribute('src', icon_src)
-  icon.onclick = evt =>
+  icon.onclick = () =>
     handleFavoriteClick(restaurant.id, !restaurant.is_favourite)
 
   const address = document.getElementById('restaurant-address')
@@ -316,6 +316,6 @@ const handleFavoriteClick = (id, newState) => {
     ? '/public/icons/heart-solid.svg'
     : '/public/icons/heart-regular.svg'
   icon.setAttribute('src', icon_src)
-  icon.onclick = evt => handleFavoriteClick(id, !newState)
+  icon.onclick = () => handleFavoriteClick(id, !newState)
   DBHelper.handleFavoriteClick(id, newState)
 }
