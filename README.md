@@ -1,13 +1,14 @@
 # Mobile Web Specialist Certification Course
 ---
 
-## Restaurant Reviews: Stage 2
+## Restaurant Reviews: Stage 3
   A Progressive Web App that shows restaurants in your neighborhoods and their reviews. Works for all types of browser and it completely  responsive on all devices to provide rich user experience to all the users
 
 ### Contents
   1. [Getting Started](getting-started)
-  2. [Twitter Posts](twitter-posts)
-  
+  2. [Features](features)
+  3. [Twitter Posts](twitter-posts)
+
 ### Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -19,7 +20,7 @@ These instructions will get you a copy of the project up and running on your loc
 #### Installation
 
 **Client**
-1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
+1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer.
 
    Then Run `npm run build` to generate the build folder before running the project.
 
@@ -29,9 +30,18 @@ These instructions will get you a copy of the project up and running on your loc
 3. Explore the provided code, and make start making a plan to implement the required features in three areas: responsive design, accessibility and offline use.
 4. Write code to implement the updates to get this site on its way to being a mobile-ready website.
 
-**Server** 
+**Server**
 
-To run the server please clone [this](https://github.com/twishasaraiya/mws-restaurant-stage-3) repository 
+To run the server please clone [this](https://github.com/twishasaraiya/mws-restaurant-stage-3) repository
+
+### Features
+
+ - [x] Maintains Responsive Design on different devices
+ - [x] Accessibility Features(semantic elements, ARIA attributes)
+ - [x] Allow Users to mark restaurant as Favorite
+ - [x] Use IndexedDB to cache data for offline user
+ - [x] Service Worker registered
+ - [x] LightHouse Score
 
 ### Twitter Posts
 
@@ -50,7 +60,4 @@ To run the server please clone [this](https://github.com/twishasaraiya/mws-resta
 You can view all my posts [here](https://twitter.com/SaraiyaTwisha)
 ### Note about ES6
 
-Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write. 
-
-
-
+Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write.
