@@ -1,18 +1,21 @@
-var gulp = require('gulp')
-// other pulgins
-var webp = require('gulp-webp')
-var browserify = require('browserify')
-var babelify = require('babelify')
-var source = require('vinyl-source-stream')
-var buffer = require('vinyl-buffer')
-var uglify = require('gulp-uglify')
-var sourcemaps = require('gulp-sourcemaps')
-var autoprefixer = require('gulp-autoprefixer')
-var cleanCSS = require('gulp-clean-css')
-var rename = require('gulp-rename')
-var log = require('gulplog')
-var bs = require('browser-sync').create()
-var reload = bs.reload
+var gulp = require('gulp'),
+  // other pulgins
+  webp = require('gulp-webp'),
+  browserify = require('browserify'),
+  babelify = require('babelify'),
+  source = require('vinyl-source-stream'),
+  buffer = require('vinyl-buffer'),
+  uglify = require('gulp-uglify'),
+  sourcemaps = require('gulp-sourcemaps'),
+  autoprefixer = require('gulp-autoprefixer'),
+  cleanCSS = require('gulp-clean-css'),
+  rename = require('gulp-rename'),
+  log = require('gulplog'),
+  bs = require('browser-sync').create(),
+  reload = bs.reload,
+  clean = require('gulp-clean'),
+  runSequence = require('run-sequence'),
+  zip = require('gulp-gzip')
 // vinyl => virtual file format for gulp streams
 
 var mainPageFiles = ['src/js/dbhelper.js', 'src/js/main.js']
@@ -22,21 +25,34 @@ var restaurantInfoPageFiles = [
 ]
 
 /*
+* Clean dist folder
+*/
+gulp.task('clean', () => {
+  gulp.src('dist/', { read: false }).pipe(clean())
+})
+/*
   * Convert Images to Next-Gen format Webp
   */
-gulp.task('images', () => {
+gulp.task('copy-images', () => {
   gulp
     .src('public/img/*.jpg')
     .pipe(webp())
     .pipe(gulp.dest('dist/img/'))
 })
 
+gulp.task('copy-icons', () => {
+  gulp.src('public/icons/*.svg').pipe(gulp.dest('dist/icons/'))
+})
+
+gulp.task('copy-html', () => {
+  gulp
+    .src(['index.html', 'offline.html', 'restaurant.html'])
+    .pipe(gulp.dest('dist/'))
+})
 /*
 * Copy files to dist folder
 */
-gulp.task('copy', () => {
-  gulp.src('index.html').pipe(gulp.dest('dist/'))
-})
+gulp.task('copy', ['copy-html', 'copy-images', 'copy-icons'])
 /*
    * Convert es6 to es2015
    * https://github.com/gulpjs/gulp/blob/master/docs/recipes/browserify-uglify-sourcemap.md
@@ -105,6 +121,16 @@ gulp.task('minify-css', () => {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist/css'))
 })
+
+/**
+ *       Compress files
+ **/
+gulp.task('compress', () => {
+  gulp
+    .src('dist/*')
+    .pipe(zip())
+    .pipe(gulp.dest('dist/'))
+})
 /*
    * Watch and rebuild js files
    */
@@ -120,4 +146,7 @@ gulp.task('serve', () => {
   bs.stream()
 })
 
-gulp.task('default', ['minify-css', 'minify-js', 'serve'])
+gulp.task(
+  'default',
+  runSequence('clean', 'copy', ['minify-css', 'minify-js'], 'serve')
+)
