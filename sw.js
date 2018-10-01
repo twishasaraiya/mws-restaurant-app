@@ -33,10 +33,10 @@ const respImages = [
   'dist/img/10-600.webp'
 ]
 var icons = [
-  '/public/icons/heart-regular.svg',
-  '/public/icons/heart-solid.svg',
-  '/public/icons/pen-solid.svg',
-  '/public/icons/star-solid.svg'
+  '/dist/icons/heart-regular.svg',
+  '/dist/icons/heart-solid.svg',
+  '/dist/icons/pen-solid.svg',
+  '/dist/icons/star-solid.svg'
 ]
 var filesToCache = [
   '/',
