@@ -42,6 +42,7 @@ To run the server please clone [this](https://github.com/twishasaraiya/mws-resta
  - [x] Use IndexedDB to cache data for offline user
  - [x] Service Worker registered
  - [x] LightHouse Score
+ ![LightHouse Score](https://github.com/twishasaraiya/mws-restaurant-app/blob/master/screenshots/Screenshot%20(38).png)
 
 ### Twitter Posts
 
