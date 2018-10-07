@@ -31,6 +31,7 @@
     "gulp-clean-css": "^3.9.4",
     "gulp-gzip": "^1.4.2",
     "gulp-rename": "^1.4.0",
+    "gulp-size": "^3.0.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
     "gulp-watch": "^5.0.1",

@@ -15,7 +15,8 @@ var gulp = require('gulp'),
   reload = bs.reload,
   clean = require('gulp-clean'),
   runSequence = require('run-sequence'),
-  zip = require('gulp-gzip')
+  zip = require('gulp-gzip'),
+  size = require('gulp-size')
 // vinyl => virtual file format for gulp streams
 
 var mainPageFiles = ['src/js/dbhelper.js', 'src/js/main.js']
@@ -28,7 +29,8 @@ var restaurantInfoPageFiles = [
 * Clean dist folder
 */
 gulp.task('clean', () => {
-  gulp.src('dist/', { read: false }).pipe(clean())
+  console.log('Clean dist folder')
+  gulp.src(['dist/**/*.*', '!dist']).pipe(clean({ force: true, read: false }))
 })
 /*
   * Convert Images to Next-Gen format Webp
@@ -47,7 +49,7 @@ gulp.task('copy-icons', () => {
 gulp.task('copy-html', () => {
   gulp
     .src(['index.html', 'offline.html', 'restaurant.html'])
-    .pipe(gulp.dest('dist/'))
+    .pipe(gulp.dest('dist/html/'))
 })
 /*
 * Copy files to dist folder
@@ -122,6 +124,13 @@ gulp.task('minify-css', () => {
     .pipe(gulp.dest('dist/css'))
 })
 
+/**
+ *     Keep Track of files size
+ **/
+gulp.task('infos', () => {
+  console.log('Total size of dist folder ')
+  gulp.src('dist/**/*.{js,css}').pipe(size({ pretty: true }))
+})
 /**
  *       Compress files
  **/
