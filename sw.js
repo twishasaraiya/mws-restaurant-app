@@ -44,13 +44,13 @@ var filesToCache = [
   'dist/css/restaurant_info_styles.min.css',
   'dist/js/restaurant.bundle.js',
   'dist/js/main.bundle.js',
-  'index.html',
-  'restaurant.html',
-  'offline.html',
-  'public/img/error_page.gif',
+  'dist/html/index.html',
+  'dist/html/restaurant.html',
+  'dist/html/offline.html',
+  'dist/img/error_page.gif',
   'src/js/lazy-load.js', // TODO browserify and uglify
   '/sw.js',
-  '/public/icons/icon.ico',
+  '/dist/icons/icon.ico',
   ...icons,
   ...respImages
 ]
